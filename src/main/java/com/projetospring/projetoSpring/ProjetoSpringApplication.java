@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.projetospring.projetospring.domain.Categoria;
 import com.projetospring.projetospring.domain.Cidade;
+import com.projetospring.projetospring.domain.Cliente;
+import com.projetospring.projetospring.domain.Endereco;
 import com.projetospring.projetospring.domain.Estado;
 import com.projetospring.projetospring.domain.Produto;
+import com.projetospring.projetospring.domain.enums.TipoCliente;
 import com.projetospring.projetospring.repositories.CategoriaRepository;
 import com.projetospring.projetospring.repositories.CidadeRepository;
+import com.projetospring.projetospring.repositories.ClienteRepository;
+import com.projetospring.projetospring.repositories.EnderecoRepository;
 import com.projetospring.projetospring.repositories.EstadoRepository;
 import com.projetospring.projetospring.repositories.ProdutoRepository;
 
@@ -27,6 +32,11 @@ public class ProjetospringApplication implements CommandLineRunner{
 	private EstadoRepository estadoRepository;
 	@Autowired
 	private CidadeRepository cidadeRepository;
+	@Autowired
+	private ClienteRepository clienteRepository;
+	@Autowired
+	private EnderecoRepository EnderecoRepository;
+	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ProjetospringApplication.class, args);
@@ -37,11 +47,11 @@ public class ProjetospringApplication implements CommandLineRunner{
 		
 		Categoria cat1 = new Categoria(null, "Informática");
 		Categoria cat2 = new Categoria(null, "Escritório");
-		
+	
 		Produto p1 = new Produto(null, "Computador", 2000.00);
 		Produto p2 = new Produto(null, "Impressora", 800.00);
 		Produto p3 = new Produto(null, "Mouse", 80.00);
-		
+
 		cat1.getProdutos().addAll(Arrays.asList(p1,p2,p3));
 		cat2.getProdutos().addAll(Arrays.asList(p2));
 		
@@ -59,13 +69,24 @@ public class ProjetospringApplication implements CommandLineRunner{
 		est1.getCidades().addAll(Arrays.asList(c1));
 		est2.getCidades().addAll(Arrays.asList(c2,c3));
 		
+		Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
+		
+		cli1.getTelefones().addAll(Arrays.asList("40028922","12345678"));
+		
+		Endereco end1 = new Endereco(null, "Rua Flores", "300", "Apto 203", "Jardim", "38220834", cli1, c1);
+		Endereco end2 = new Endereco(null, "Avenida Matos", "104", "Sala 800", "Centro", "38777012", cli1, c2);
+		
+		cli1.getEnderecos().addAll(Arrays.asList(end1, end2));
+		
 		
 		categoriaRepository.saveAll(Arrays.asList(cat1,cat2));
-		
 		produtoRepository.saveAll(Arrays.asList(p1,p2,p3));
 		
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
+		
+		clienteRepository.saveAll(Arrays.asList(cli1));
+		EnderecoRepository.saveAll(Arrays.asList(end1, end2));
 		
 		
 	}
