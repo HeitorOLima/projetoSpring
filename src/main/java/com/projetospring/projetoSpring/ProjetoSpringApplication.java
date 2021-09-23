@@ -1,5 +1,6 @@
 package com.projetospring.projetospring;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import com.projetospring.projetospring.domain.Cidade;
 import com.projetospring.projetospring.domain.Cliente;
 import com.projetospring.projetospring.domain.Endereco;
 import com.projetospring.projetospring.domain.Estado;
+import com.projetospring.projetospring.domain.Pagamento;
+import com.projetospring.projetospring.domain.PagamentoComBoleto;
+import com.projetospring.projetospring.domain.PagamentoComCartao;
+import com.projetospring.projetospring.domain.Pedido;
 import com.projetospring.projetospring.domain.Produto;
+import com.projetospring.projetospring.domain.enums.EstadoPagamento;
 import com.projetospring.projetospring.domain.enums.TipoCliente;
 import com.projetospring.projetospring.repositories.CategoriaRepository;
 import com.projetospring.projetospring.repositories.CidadeRepository;
 import com.projetospring.projetospring.repositories.ClienteRepository;
 import com.projetospring.projetospring.repositories.EnderecoRepository;
 import com.projetospring.projetospring.repositories.EstadoRepository;
+import com.projetospring.projetospring.repositories.PagamentoRepository;
+import com.projetospring.projetospring.repositories.PedidoRepository;
 import com.projetospring.projetospring.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -36,6 +44,10 @@ public class ProjetospringApplication implements CommandLineRunner{
 	private ClienteRepository clienteRepository;
 	@Autowired
 	private EnderecoRepository EnderecoRepository;
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
+	@Autowired
+	private PedidoRepository pedidoRepository;
 	
 	
 	public static void main(String[] args) {
@@ -78,6 +90,18 @@ public class ProjetospringApplication implements CommandLineRunner{
 		
 		cli1.getEnderecos().addAll(Arrays.asList(end1, end2));
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		
+		Pedido ped1 = new Pedido(null, sdf.parse("10/09/2017 10:31"), cli1, end1);
+		Pedido ped2 = new Pedido(null, sdf.parse("30/12/2017 10:31"), cli1, end2);
+		
+		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.PAGAMENTOREALIZADO, ped1, 6);
+		ped1.setPagamento(pagto1);
+		
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PAGAMENTOPENDENTE, ped2, sdf.parse("20/10/2017 00:00"), null);
+		ped2.setPagamento(pagto2);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
 		
 		categoriaRepository.saveAll(Arrays.asList(cat1,cat2));
 		produtoRepository.saveAll(Arrays.asList(p1,p2,p3));
@@ -87,6 +111,9 @@ public class ProjetospringApplication implements CommandLineRunner{
 		
 		clienteRepository.saveAll(Arrays.asList(cli1));
 		EnderecoRepository.saveAll(Arrays.asList(end1, end2));
+		
+		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));		
+		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
 		
 		
 	}
