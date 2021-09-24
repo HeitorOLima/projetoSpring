@@ -1,10 +1,10 @@
 package com.projetospring.projetospring.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,8 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -38,9 +38,8 @@ public class Pedido implements Serializable{
 	@JoinColumn(name="cliente_id")
 	private Cliente cliente;
 	
-	
-	@ManyToMany (mappedBy = "pedidos")
-	private List<Produto> produtos = new ArrayList<>(); 
+	@OneToMany(mappedBy = "id.pedido")
+	private Set<ItemPedido> itens = new HashSet<>();
 	
 	public Pedido() {
 	}
@@ -93,13 +92,14 @@ public class Pedido implements Serializable{
 		this.cliente = cliente;
 	}
 
-	public List<Produto> getProdutos() {
-		return produtos;
+	public Set<ItemPedido> getItens() {
+		return itens;
 	}
 
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
+	public void setItens(Set<ItemPedido> itens) {
+		this.itens = itens;
 	}
+	
 
 	@Override
 	public int hashCode() {
@@ -117,7 +117,6 @@ public class Pedido implements Serializable{
 		Pedido other = (Pedido) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
+
 	
 }

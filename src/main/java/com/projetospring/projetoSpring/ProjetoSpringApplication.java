@@ -13,6 +13,7 @@ import com.projetospring.projetospring.domain.Cidade;
 import com.projetospring.projetospring.domain.Cliente;
 import com.projetospring.projetospring.domain.Endereco;
 import com.projetospring.projetospring.domain.Estado;
+import com.projetospring.projetospring.domain.ItemPedido;
 import com.projetospring.projetospring.domain.Pagamento;
 import com.projetospring.projetospring.domain.PagamentoComBoleto;
 import com.projetospring.projetospring.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.projetospring.projetospring.repositories.CidadeRepository;
 import com.projetospring.projetospring.repositories.ClienteRepository;
 import com.projetospring.projetospring.repositories.EnderecoRepository;
 import com.projetospring.projetospring.repositories.EstadoRepository;
+import com.projetospring.projetospring.repositories.ItemPedidoRepository;
 import com.projetospring.projetospring.repositories.PagamentoRepository;
 import com.projetospring.projetospring.repositories.PedidoRepository;
 import com.projetospring.projetospring.repositories.ProdutoRepository;
@@ -48,6 +50,8 @@ public class ProjetospringApplication implements CommandLineRunner{
 	private PagamentoRepository pagamentoRepository;
 	@Autowired
 	private PedidoRepository pedidoRepository;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	
 	public static void main(String[] args) {
@@ -103,6 +107,19 @@ public class ProjetospringApplication implements CommandLineRunner{
 		
 		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
 		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip1));
+		
+		
+		
 		categoriaRepository.saveAll(Arrays.asList(cat1,cat2));
 		produtoRepository.saveAll(Arrays.asList(p1,p2,p3));
 		
@@ -115,6 +132,7 @@ public class ProjetospringApplication implements CommandLineRunner{
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));		
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
 		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 		
 	}
 
